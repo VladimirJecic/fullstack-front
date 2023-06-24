@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
   const [userData, setUserData] = useState({
@@ -8,6 +9,7 @@ const RegisterPage = () => {
     email: "",
     password: "",
   });
+  let navigate = useNavigate();
   function handleInput(e) {
     let newUserData = userData;
     newUserData[e.target.name] = e.target.value;
@@ -16,9 +18,10 @@ const RegisterPage = () => {
   function handleRegister(e) {
     e.preventDefault();
     axios
-      .post("http://127.0.0.1:8000/api/register", userData)
+      .post("api/register", userData)
       .then((res) => {
-        console.log(res.data);
+        console.log("Response\n"+res.data);
+        navigate("/login");
       })
       .catch((e) => {
         console.log(e);

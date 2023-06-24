@@ -1,12 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
-
-const LoginPage = () => {
+import { useNavigate } from "react-router-dom";
+const LoginPage = ({addToken}) => {
      const [userData,setUserData] = useState({
         email: "",
         password: ""
      });
+     let navigate = useNavigate();
      function handleInput(e){
         // console.log(e);
         let newUserData = userData;
@@ -15,12 +16,14 @@ const LoginPage = () => {
      }
      function handleLogin(e){
         e.preventDefault();
-        axios.post("http://127.0.0.1:8000/api/login",userData).
+        axios.post("/api/login",userData).
         then((res)=>{
             console.log(res.data);
             if(res.data.success === true){
                 //postavlja se token
                 window.sessionStorage.setItem("auth_token",res.data.access_token);
+                addToken(res.data.access_token);
+                navigate("/")
             }else{
                 //u slucaju pogresnih kredencijala
             }
